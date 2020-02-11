@@ -1,0 +1,12 @@
+{
+  "providerId": "Microsoft.Tools.ServiceModel.Svcutil",
+  "version": "2.0.1",
+  "options": {
+    "inputs": [
+      "http://localhost:56580/BookService.svc?wsdl"
+    ],
+    "outputFile": "Reference.cs",
+    "targetFramework": "netcoreapp3.1",
+    "typeReuseMode": "All"
+  }
+}

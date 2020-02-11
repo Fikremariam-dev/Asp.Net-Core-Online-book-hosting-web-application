@@ -1,0 +1,71 @@
+﻿@model Web.Models.Book
+
+<div class=" container">
+    <div>
+        <h2 class="text-muted">View Book</h2>
+    </div>
+</div>
+
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-md-4">
+            <div>
+                <img class="imageCell" src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" style=" width:200px;height:300px; " />
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <p id="itemTitle">@Model.Title</p>
+            <p id="itemAuthor">@Model.Author</p>
+                @{
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (i < ViewBag.Rating)
+                        {
+                            <span>
+                                <img class="imageCell" src="/images/star-fill-lg.png" />
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <img class="imageCell" src="/images/star-empty-lg.png" />
+                            </span>
+                        }
+                    }
+
+                }
+                 <span style="color:darkcyan"> avg.Rating @ViewBag.Rating</span>
+                
+                @{
+                    if (ViewBag.NumberOfRatings == 1)
+                    {
+                           <span style="color:darkcyan"><br />@ViewBag.NumberOfRatings user Rated this book</span>
+                    }
+                    else
+                    {
+                            <span style="color:darkcyan"><br />@ViewBag.NumberOfRatings users Rated this book</span>
+                    }
+                }
+                <p></p>
+                <p></p>
+                <p><a class="btn btn-lg btn-info" role="button" asp-controller="Read" asp-action="Index" asp-route-Id="@Model.Id">Read</a></p>
+        </div>
+
+        <div class="col-md-4">
+            <table>
+
+                <tr>
+                    <td class="itemLabel">Phone:  +</td>
+                    <td class="itemValue">  @Model.PhoneNo</td>
+                </tr>
+                <tr>
+                    <td class="itemLabel">Tags: </td>
+                    <td class="itemValue">@Model.Tags</td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+</div>

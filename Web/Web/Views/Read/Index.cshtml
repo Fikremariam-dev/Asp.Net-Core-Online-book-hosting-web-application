@@ -1,0 +1,210 @@
+﻿@model Web.Models.Read.Read
+<style type="text/css">
+    .empty {
+        content: url( "/images/star-empty-lg.png");
+    }
+
+    .filled {
+        content: url("/images/star-fill-lg.png")
+    }
+</style>
+
+<br />
+<div class="row jumbotron">
+    <div class="col-sm-2">
+        <div>
+            <img class="imageCell" src="@Url.Action("getImage", new { id = Model.ID })" style=" width:180px;height:270px; " />
+        </div>
+            <div>
+                <br />
+                <img class="empty" id="1" />
+                <img class="empty" id="2" />
+                <img class="empty" id="3" />
+                <img class="empty" id="4" />
+                <img class="empty" id="5" />
+                <p>
+                    <p id="ratingP"></p>
+                    <a class="btn btn-lg btn-info" id="Rate" style="color:white" role="button">Rate</a>
+                </p>
+            </div>
+    </div>
+
+    <div class="col-sm-1"></div>
+
+    <div class=" col-sm-9">
+        <div>
+            @{
+                if (Model.Chapters != 0)
+                {
+                    <p style="font:xx-large"><b>Chapter :- </b><input id="chapterNumber" size="1" value="@Model.CurrentChapterNumber" /> of (@Model.Chapters)</p>
+                }
+            }
+        </div>
+        <div>
+            @{
+                if (Model.CurrentChapter == "Chapters are not available at the moment")
+                {
+                    <h2 style="color:crimson">@Model.CurrentChapter</h2>
+                }
+                else
+                {
+                    <p>@Model.CurrentChapter</p>
+                }
+            }
+        </div>
+        <span></span>
+        @{
+            int prev()
+            {
+                int p = @Model.CurrentChapterNumber - 1;
+                return p;
+            }
+            int next()
+            {
+                int n = @Model.CurrentChapterNumber + 1;
+                return n;
+            }
+        }
+        @if (@Model.CurrentChapterNumber > 1)
+        {
+            <span> <a class="btn btn-lg btn-info" style="color:white" role="button" asp-controller="Read" asp-action="Index" asp-route-Id="@Model.ID" asp-route-c="@prev()">Prev</a></span>
+        }
+        @if (Model.Chapters != 0)
+        {
+            <span>@Model.CurrentChapterNumber</span>
+        }
+        @if (@Model.CurrentChapterNumber < Model.Chapters)
+        {
+            <span><a class="btn btn-lg btn-info" style="color:white" role="button" asp-controller="Read" asp-action="Index" asp-route-Id="@Model.ID" asp-route-c="@next()">Next</a></span>
+        }
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        var active = true;
+        var starVote = 0;
+
+        function click(vote) {
+            if (active) {
+                starVote = vote;
+                active = false;
+            }
+            else if (vote == starVote) {
+                active = true;
+                leave();
+            } 
+            else {
+                active = true;
+                enter(vote);
+                click(vote);
+            }
+        }
+        $('#1').click(function () {
+            click(1);
+        });
+        $('#2').click(function () {
+            click(2);
+        });
+        $('#3').click(function () {
+            click(3);
+        });
+        $('#4').click(function () {
+            click(4);
+        });
+        $('#5').click(function () {
+            click(5);
+        });
+        function leave() {
+            if (active) {
+                  for (var i = 1; i <= 5; i++) {
+                        var star = document.getElementById(i);
+                        star.classList.remove('filled');
+                        star.classList.add('empty');
+                  }
+
+            }
+        }
+         $('#1').mouseleave(function () {
+            leave();
+         });
+         $('#2').mouseleave(function () {
+            leave();
+         });
+         $('#3').mouseleave(function () {
+             leave();
+         });
+         $('#4').mouseleave(function () {
+             leave();
+         });
+         $('#5').mouseleave(function () {
+             leave();
+         });
+        function enter(x) {
+            if (active) {
+                for (var i = 1; i <= 5; i++) {
+                    if (i <= x) {
+                        var star = document.getElementById( i);
+                        star.classList.remove('empty');
+                        star.classList.add('filled');
+                    }
+                    else {
+                        var star = document.getElementById(i);
+                        star.classList.remove('filled');
+                        star.classList.add('empty');
+                    }
+
+                }
+            }
+        }
+        $('#1').mouseenter(function () {
+            enter(1);
+        });
+        $('#2').mouseenter(function () {
+            enter(2);
+        });
+        $('#3').mouseenter(function () {
+            enter(3);
+        });
+        $('#4').mouseenter(function () {
+            enter(4);
+        });
+        $('#5').mouseenter(function () {
+            enter(5);
+        });
+
+        var rp = document.getElementById('ratingP');
+
+        if (@Model.userRating != 0) {
+            enter(@Model.userRating)
+            active = false;
+            starVote = @Model.userRating;
+            rp.innerHTML = 'You Rated this Book ' + @Model.userRating + ' stars';
+        }
+
+
+        
+        document.getElementById('Rate').onclick = function (e) {
+            if (!active) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Rate","Read")',
+                    data: {UserID : @Model.ReaderId.ToString(),BookID : @Model.ID, value : starVote},
+                    dataType: "json"
+                });
+                rp.innerHTML = 'You Rated this Book ' + starVote + ' stars';
+                alert('you have successfully rated this book');
+            }
+        }
+        
+
+        $("#chapterNumber").keyup(function (event) {
+            if (event.keyCode == 13) {
+                var ch = document.getElementById('chapterNumber').value;
+                window.location.href = "/Read/Index/@Model.ID?c=" + ch;
+            }
+        })
+
+    </script>
+
+}

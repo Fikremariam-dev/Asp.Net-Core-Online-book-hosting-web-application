@@ -1,0 +1,60 @@
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Catalog" asp-action="Index">Books</a>
+                        </li>
+                    </ul>
+                </div>
+                <form class="navbar-form navbar-right" asp-controller="Catalog" asp-action="Index" method="get">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search for a book" name="searchString" value="@ViewData["searchString"]">
+                    </div>
+                </form>
+                @{ if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.FindFirstValue(ClaimTypes.Name) == "Admin")
+                        {
+                            <a class="nav-link text-dark" asp-controller="AddBook" asp-action="Index">Add Book</a>
+                        }
+                        <a class="nav-link text-dark" asp-controller="Login" asp-action="Logout">Logout</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
+                        <a class="nav-link text-dark" asp-controller="Login" asp-action="Register">Register</a>
+                    }
+                }
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Web
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

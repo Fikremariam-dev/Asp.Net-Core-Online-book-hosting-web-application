@@ -1,0 +1,51 @@
+@using System.Security.Claims;
+@model IEnumerable<Web.Models.Book>
+<h3 class="text-muted">Catalog @{if (ViewBag.ss != null)
+    { <span >showing results for "@ViewBag.ss"</span>} }</h3>
+<div id="booksTable">
+    <table class="table table-condensed" id="catalogIndexTable">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Geners</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+
+                @foreach (var book in Model)
+                {
+                    <tr class="assetRow ">
+                        <td class="">
+                            <div>
+                                <a asp-controller="Catalog" asp-action="Detail" asp-route-Id="@book.Id">
+                                    <img src="@Url.Action("getImage", new { id = book.Id })" style="width:100px;height:130px;" class="imageCell" />
+                                </a>
+                            </div>
+                        </td>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@book.Tags</td>
+                        <td>
+                            @{ if (User.Identity.IsAuthenticated)
+                                {
+                                    if (User.FindFirstValue(ClaimTypes.Name) == "Admin")
+                                    {
+                                        <a class="btn btn-danger"  asp-controller="Catalog" asp-action="Delete" asp-route-Id="@book.Id">
+                                            <img src="~/images/Delete.png" />
+                                        </a>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+</div>

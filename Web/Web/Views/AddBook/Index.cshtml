@@ -1,0 +1,68 @@
+﻿@model Web.Models.AddBook.BookModel
+<style>
+    .containerr {
+        width: 25%;
+        margin: 0 auto;
+    }
+</style>
+<h4 style="text-align:center">Enter Book details below </h4>
+<h5 style="text-align:center">
+    @{
+        if (ViewBag.m != "")
+        {
+            if(ViewBag.m == "successfully added")
+            {
+                <span style="color:green"></span>
+            }
+            <span style="color:crimson">@ViewBag.m</span>
+        }
+    }
+</h5>
+<hr />
+<div class="row">
+    <div class="containerr">
+        <form asp-controller="AddBook" asp-action="Add" method="post" role="form">
+            <div class="form-group">
+                <label class="control-label col-md-5">Title</label>
+                <div>
+                    <input asp-for="Title" class="form-control" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">Year</label>
+                <div>
+                    <input asp-for="Year" class="form-control" value="2000" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">Image Path</label>
+                <div>
+                    <input asp-for="ImagePath" class="form-control" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">Tags</label>
+                <div>
+                    <input asp-for="Tags" class="form-control" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">Author</label>
+                <div>
+                    <input asp-for="Author" class="form-control" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">PhoneNo</label>
+                <div>
+                    <input asp-for="PhoneNo" class="form-control" style="width: 300px" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="text-align:center">
+                    <input type="submit" class="btn btn-lg btn-info" value="Add" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
